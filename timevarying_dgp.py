@@ -1,46 +1,46 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# TODO: should the time-varying component be phi, or volatility, or both? fix beta to 1 for simplicity
 def generateDGP(N=10000):
-    # We have 2 cointegrated time series X and Y, related by some non-stationary, stochastic relationship, whose
-    # successful estimation is necessary for optimal trading of assets X and Y.
     sigmaX = 0.05
-    sigmaY = 0.05
-    phi = 0.45
-    intercept = 0.5
+    sigmaEta = 0.1
 
-    slope_theta = 0.005
-    slope_mu = 0.6
-    slope_sigma = 0.005
+    mu = 1.
 
     X = []
     Y = []
-    slope = [slope_mu]
-    epsilon = [0.]
+    epsilon = [mu]
     for t in range(N):
+        if t % 200 == 0:
+            theta = np.random.normal(0.1, 0.1)
+            if theta < 0:
+                theta = 0.
+
         if len(X) == 0:
             X.append(np.random.normal(10., sigmaX))
         else:
             X.append(X[-1] + np.random.normal(0., sigmaX))
 
-        epsilon.append(phi * epsilon[t - 1] + np.random.normal(0., sigmaY))
-        Y.append(intercept + slope[-1] * X[-1] + epsilon[-1])
+        epsilon.append(epsilon[-1] + theta * (mu - epsilon[-1]) + np.random.normal(0., sigmaEta))
 
-        slope.append(slope[-1] + slope_theta * (slope_mu - slope[-1]) + np.random.normal(0., slope_sigma))
+        Y.append(X[-1] + epsilon[-1])
+
 
     X = np.array(X)
     Y = np.array(Y)
 
-    return X, Y, slope_mu
+    return X, Y
 
-X, Y, slope_mu = generateDGP()
-plt.plot(X)
-plt.plot(Y)
-
-plt.show()
-
-# Visualize the spread
-spread = Y - slope_mu * X
-
-plt.plot(spread)
-plt.show()
+# X, Y = generateDGP(2000)
+#
+# # plt.plot(X)
+# # plt.plot(Y)
+# #
+# # plt.show()
+#
+# # Visualize the spread
+# spread = Y - X
+#
+# plt.plot(spread)
+# plt.show()

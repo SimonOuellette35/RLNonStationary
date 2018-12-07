@@ -12,16 +12,11 @@ class RLAgent:
         self.memory = deque(maxlen=500000)
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.0
-        self.epsilon_decay = 0.995
+        self.epsilon_decay = 0.5    # was: 0.7
         self.model = None
 
-    def remember(self, state, action, reward):
-        np_state = np.reshape(state, self.state_size)
-        np_action = np.reshape(action, 1)
-        np_reward = np.reshape(reward, 1)
-        mem_entry = np.concatenate((np_state, np_action, np_reward), axis=0)
-
-        self.memory.append(mem_entry)
+    def remember(self, sar):
+        self.memory.append(sar)
 
     def act(self, state, use_explo=True):
         if use_explo:
@@ -45,7 +40,7 @@ class RLAgent:
 
     def replay(self):
         # specify parameters via map
-        max_depth = 8
+        max_depth = 5
         num_round = 2
 
         param = {'max_depth': max_depth, 'eta': 1, 'silent': 1, 'objective': 'reg:linear'}
