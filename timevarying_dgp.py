@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# TODO: should the time-varying component be phi, or volatility, or both? fix beta to 1 for simplicity
+# TODO: should the time-varying component be mu, or volatility, or both? fix beta to 1 for simplicity
 def generateDGP(N=10000):
     sigmaX = 0.05
     sigmaEta = 0.1
-
+    theta = 0.05
     mu = 1.
 
     X = []
@@ -13,9 +13,7 @@ def generateDGP(N=10000):
     epsilon = [mu]
     for t in range(N):
         if t % 200 == 0:
-            theta = np.random.normal(0.1, 0.1)
-            if theta < 0:
-                theta = 0.
+            mu += np.random.normal(0., 0.25)
 
         if len(X) == 0:
             X.append(np.random.normal(10., sigmaX))

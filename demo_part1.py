@@ -6,9 +6,8 @@ import matplotlib.pyplot as plt
 
 N = 2000
 
-# TODO: 2) show that it's not just because the historical version had less data to learn from than the imagination-augmented version
-# TODO: 3) show that the rolling approach isn't sufficient, or is less efficient than the scenario-based approach
-# TODO: 4) address the question "isn't it cheating that you already know the DGP that generated the data, in your imagination-augmented approach"?
+# TODO: 1) show that it's not just because the historical version had less data to learn from than the imagination-augmented version
+# TODO: 2) address the question "isn't it cheating that you already know the DGP that generated the data, in your imagination-augmented approach"?
 
 REWARD_HORIZON = 100
 DISCOUNT_DECAY = 0.98
@@ -52,7 +51,7 @@ def run_simulation(x, y, agent, train_agent=False):
 
     return current_pnl
 
-NUM_TRAINING_ITERATIONS = 400
+NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
 # =================================================== Part 1 =======================================================
@@ -71,7 +70,7 @@ print "Training the agent..."
 # 2. train the agent on that trajectory, show that it learned some optimum
 agent = RLAgent(2, 3)
 training_pnls = []
-DELTA = 50
+DELTA = 20
 for j in range(NUM_TRAINING_ITERATIONS):
     training_pnl = run_simulation(x, y, agent, True)
     training_pnls.append(training_pnl)

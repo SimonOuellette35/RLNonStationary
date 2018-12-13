@@ -54,27 +54,23 @@ def run_simulation(x, y, agent, train_agent=False):
 NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
-# =================================================== Part 2 =======================================================
-print "Part 2: Why non-stationary, time-varying time series are not fun..."
-print "1. we get a specific historical realization of data from our time-varying DGP"
-print "2. we train the agent on that trajectory."
-print "3. we test that trained agent on new data from the same DGP: we show that its performance does NOT generalize well (as predicted)."
+# =================================================== Part 4 =======================================================
+print "Part 4: The solution -- simulation-based learning."
+print "1. we generate several trajectories with out generative model"
+print "2. we train the agent on those trajectories."
+print "3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted)."
 
 in_samplePnLs = []
 out_samplePnLs = []
 
-# 1. generate a non-stationary "historical" trajectory
-x, y = tvdgp.generateDGP(N)
-spread = y - x
-plt.plot(spread)
-plt.show()
-
 print "Training the agent..."
-# 2. train the agent on that trajectory, show that it learned some optimum
 agent = RLAgent(2, 3)
 training_pnls = []
 DELTA = 20
 for j in range(NUM_TRAINING_ITERATIONS):
+    # generate a non-stationary "historical" trajectory
+    x, y = tvdgp.generateDGP(N)
+
     training_pnl = run_simulation(x, y, agent, True)
     training_pnls.append(training_pnl)
     if j % DELTA == 0:
@@ -88,8 +84,6 @@ for j in range(NUM_TRAINING_ITERATIONS):
 
 print "Agent epsilon after training: ", agent.epsilon
 agent.epsilon = 0.
-
-#agent.plot_strategy()
 
 in_samplePnL = run_simulation(x, y, agent)
 print "Average P&L after training: ", in_samplePnL
@@ -110,7 +104,3 @@ ax2.set_title("Part 2 - Out-of-sample P&Ls")
 plt.show()
 
 print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
-
-# # =================================================== Part 4 =======================================================
-# print "Part 4: The principled approach to solving the non-stationarity problem... A comparison with the rolling window approach."
-#

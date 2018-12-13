@@ -12,7 +12,7 @@ class RLAgent:
         self.memory = deque(maxlen=500000)
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.0
-        self.epsilon_decay = 0.5    # was: 0.7
+        self.epsilon_decay = 0.25
         self.model = None
 
     def remember(self, sar):

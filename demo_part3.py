@@ -4,7 +4,7 @@ from rl_agent import RLAgent
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 2000
+N = 150
 
 # TODO: 1) show that it's not just because the historical version had less data to learn from than the imagination-augmented version
 # TODO: 2) address the question "isn't it cheating that you already know the DGP that generated the data, in your imagination-augmented approach"?
@@ -54,11 +54,12 @@ def run_simulation(x, y, agent, train_agent=False):
 NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
-# =================================================== Part 2 =======================================================
-print "Part 2: Why non-stationary, time-varying time series are not fun..."
+# TODO: make the output P&L/fitness/generalization score pro-rated so that we can compare the value no matter the
+# value of N.
+# =================================================== Part 3 =======================================================
+print "Part 3: The conventional solution of the mysteriously estimated rolling windows..."
 print "1. we get a specific historical realization of data from our time-varying DGP"
-print "2. we train the agent on that trajectory."
-print "3. we test that trained agent on new data from the same DGP: we show that its performance does NOT generalize well (as predicted)."
+print "2. ???"
 
 in_samplePnLs = []
 out_samplePnLs = []
@@ -111,6 +112,20 @@ plt.show()
 
 print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
 
+# # =================================================== Part 3 =======================================================
+# print "Part 3: The conventional solution of the mysteriously estimated rolling windows..."
+# print "In Part 3, we repeat %s times the following steps:" % NUM_TESTS
+# print "1. we get a specific historical realization of data from our time-varying DGP"
+# print "2. ???"
+#
+# # TODO: how do we do this?
+#
+# # 1. generate a time-varying "historical" trajectory
+#
+# # 2. train the agent on that trajectory in a rolling fashion, and test in a rolling fashion.
+#
+# # 3. show that it does better than the non-rolling version, but more poorly than my proposed approach.
+#
 # # =================================================== Part 4 =======================================================
 # print "Part 4: The principled approach to solving the non-stationarity problem... A comparison with the rolling window approach."
 #
