@@ -1,16 +1,12 @@
-import stationary_dgp as sdgp
 import timevarying_dgp as tvdgp
 from rl_agent import RLAgent
 import numpy as np
 import matplotlib.pyplot as plt
 
 N = 2000
-
-# TODO: 1) show that it's not just because the historical version had less data to learn from than the imagination-augmented version
-# TODO: 2) address the question "isn't it cheating that you already know the DGP that generated the data, in your imagination-augmented approach"?
-
 REWARD_HORIZON = 100
 DISCOUNT_DECAY = 0.98
+
 def run_simulation(x, y, agent, train_agent=False):
 
     def calculate_reward(t, position):
@@ -55,8 +51,8 @@ NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
 # =================================================== Part 2 =======================================================
-print "Part 2: Why non-stationary, time-varying time series are not fun..."
-print "1. we get a specific historical realization of data from our time-varying DGP"
+print "Part 2: Optimizing on non-stationary historical data..."
+print "1. we get a specific historical realization of data from our time-varying DGP."
 print "2. we train the agent on that trajectory."
 print "3. we test that trained agent on new data from the same DGP: we show that its performance does NOT generalize well (as predicted)."
 
@@ -89,8 +85,6 @@ for j in range(NUM_TRAINING_ITERATIONS):
 print "Agent epsilon after training: ", agent.epsilon
 agent.epsilon = 0.
 
-#agent.plot_strategy()
-
 in_samplePnL = run_simulation(x, y, agent)
 print "Average P&L after training: ", in_samplePnL
 
@@ -110,7 +104,3 @@ ax2.set_title("Part 2 - Out-of-sample P&Ls")
 plt.show()
 
 print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
-
-# # =================================================== Part 4 =======================================================
-# print "Part 4: The principled approach to solving the non-stationarity problem... A comparison with the rolling window approach."
-#

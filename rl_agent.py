@@ -2,7 +2,6 @@ import random
 import numpy as np
 from collections import deque
 import xgboost as xgb
-import matplotlib.pyplot as plt
 
 class RLAgent:
 
@@ -61,13 +60,3 @@ class RLAgent:
 
         if self.epsilon > self.epsilon_min:
             self.epsilon *= self.epsilon_decay
-
-    def plot_strategy(self):
-        xgb.plot_tree(self.model)
-        plt.show()
-
-    def load(self, name):
-        self.model.load_weights(name)
-
-    def save(self, name):
-        self.model.save_weights(name)

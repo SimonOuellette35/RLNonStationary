@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# TODO: should the time-varying component be mu, or volatility, or both? fix beta to 1 for simplicity
 def generateDGP(N=10000):
     sigmaX = 0.05
     sigmaEta = 0.1

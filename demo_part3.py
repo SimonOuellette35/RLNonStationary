@@ -1,16 +1,12 @@
-import stationary_dgp as sdgp
 import timevarying_dgp as tvdgp
 from rl_agent import RLAgent
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 150
-
-# TODO: 1) show that it's not just because the historical version had less data to learn from than the imagination-augmented version
-# TODO: 2) address the question "isn't it cheating that you already know the DGP that generated the data, in your imagination-augmented approach"?
-
+N = 2000
 REWARD_HORIZON = 100
 DISCOUNT_DECAY = 0.98
+
 def run_simulation(x, y, agent, train_agent=False):
 
     def calculate_reward(t, position):
@@ -54,28 +50,23 @@ def run_simulation(x, y, agent, train_agent=False):
 NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
-# TODO: make the output P&L/fitness/generalization score pro-rated so that we can compare the value no matter the
-# value of N.
-# =================================================== Part 3 =======================================================
-print "Part 3: The conventional solution of the mysteriously estimated rolling windows..."
-print "1. we get a specific historical realization of data from our time-varying DGP"
-print "2. ???"
+# =================================================== Part 4 =======================================================
+print "Part 3: The solution -- simulation-based learning."
+print "1. we generate several trajectories with our (theoretically perfect) generative model."
+print "2. we train the agent on those trajectories."
+print "3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted)."
 
 in_samplePnLs = []
 out_samplePnLs = []
 
-# 1. generate a non-stationary "historical" trajectory
-x, y = tvdgp.generateDGP(N)
-spread = y - x
-plt.plot(spread)
-plt.show()
-
 print "Training the agent..."
-# 2. train the agent on that trajectory, show that it learned some optimum
 agent = RLAgent(2, 3)
 training_pnls = []
 DELTA = 20
 for j in range(NUM_TRAINING_ITERATIONS):
+    # generate a non-stationary "historical" trajectory
+    x, y = tvdgp.generateDGP(N)
+
     training_pnl = run_simulation(x, y, agent, True)
     training_pnls.append(training_pnl)
     if j % DELTA == 0:
@@ -90,8 +81,6 @@ for j in range(NUM_TRAINING_ITERATIONS):
 print "Agent epsilon after training: ", agent.epsilon
 agent.epsilon = 0.
 
-#agent.plot_strategy()
-
 in_samplePnL = run_simulation(x, y, agent)
 print "Average P&L after training: ", in_samplePnL
 
@@ -105,27 +94,9 @@ for j in range(NUM_TEST_ITERATIONS):
 fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
 
 ax1.plot(training_pnls)
-ax1.set_title("Part 2 - In-sample P&Ls")
+ax1.set_title("Part 3 - In-sample P&Ls")
 ax2.plot(out_samplePnLs)
-ax2.set_title("Part 2 - Out-of-sample P&Ls")
+ax2.set_title("Part 3 - Out-of-sample P&Ls")
 plt.show()
 
 print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
-
-# # =================================================== Part 3 =======================================================
-# print "Part 3: The conventional solution of the mysteriously estimated rolling windows..."
-# print "In Part 3, we repeat %s times the following steps:" % NUM_TESTS
-# print "1. we get a specific historical realization of data from our time-varying DGP"
-# print "2. ???"
-#
-# # TODO: how do we do this?
-#
-# # 1. generate a time-varying "historical" trajectory
-#
-# # 2. train the agent on that trajectory in a rolling fashion, and test in a rolling fashion.
-#
-# # 3. show that it does better than the non-rolling version, but more poorly than my proposed approach.
-#
-# # =================================================== Part 4 =======================================================
-# print "Part 4: The principled approach to solving the non-stationarity problem... A comparison with the rolling window approach."
-#
