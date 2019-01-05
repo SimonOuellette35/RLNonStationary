@@ -56,7 +56,6 @@ print "1. we get a specific historical realization of data from our time-varying
 print "2. we train the agent on that trajectory."
 print "3. we test that trained agent on new data from the same DGP: we show that its performance does NOT generalize well (as predicted)."
 
-in_samplePnLs = []
 out_samplePnLs = []
 
 # 1. generate a non-stationary "historical" trajectory
@@ -82,11 +81,7 @@ for j in range(NUM_TRAINING_ITERATIONS):
         else:
             print "pct_progress = %s %% (current average P&L is %s)" % (pct_progress, np.mean(training_pnls[-DELTA:]))
 
-print "Agent epsilon after training: ", agent.epsilon
 agent.epsilon = 0.
-
-in_samplePnL = run_simulation(x, y, agent)
-print "Average P&L after training: ", in_samplePnL
 
 print "Testing the agent..."
 # 3. test the agent on a series of stationary trajectories, show that it generalizes
@@ -103,4 +98,7 @@ ax2.plot(out_samplePnLs)
 ax2.set_title("Part 2 - Out-of-sample P&Ls")
 plt.show()
 
-print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
+print "Average out-sample P&L across the tests: %s (standard deviation: %s)" % (
+    np.mean(out_samplePnLs),
+    np.std(out_samplePnLs)
+)

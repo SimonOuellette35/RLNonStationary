@@ -61,6 +61,9 @@ out_samplePnLs = []
 
 # 1. generate a stationary "historical" trajectory
 x, y = sdgp.generateDGP(N)
+spread = y - x
+plt.plot(spread)
+plt.show()
 
 print "Training the agent..."
 # 2. train the agent on that trajectory, show that it learned some optimum
@@ -78,12 +81,6 @@ for j in range(NUM_TRAINING_ITERATIONS):
             print "pct_progress = %s %%" % (pct_progress)
         else:
             print "pct_progress = %s %% (current average P&L is %s)" % (pct_progress, np.mean(training_pnls[-DELTA:]))
-
-print "Agent epsilon after training: ", agent.epsilon
-agent.epsilon = 0.
-
-in_samplePnL = run_simulation(x, y, agent)
-print "Average P&L after training: ", in_samplePnL
 
 print "Testing the agent..."
 # 3. test the agent on a series of stationary trajectories, show that it generalizes

@@ -3,7 +3,7 @@ from rl_agent import RLAgent
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 2000
+N = 5000 # TODO: what if we change N, can we accentuate the difference?
 REWARD_HORIZON = 100
 DISCOUNT_DECAY = 0.98
 
@@ -50,21 +50,18 @@ def run_simulation(x, y, agent, train_agent=False):
 NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
-# =================================================== Part 4 =======================================================
+# =================================================== Part 3 =======================================================
 print "Part 3: The solution -- simulation-based learning."
 print "1. we generate several trajectories with our (theoretically perfect) generative model."
 print "2. we train the agent on those trajectories."
 print "3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted)."
-
-in_samplePnLs = []
-out_samplePnLs = []
 
 print "Training the agent..."
 agent = RLAgent(2, 3)
 training_pnls = []
 DELTA = 20
 for j in range(NUM_TRAINING_ITERATIONS):
-    # generate a non-stationary "historical" trajectory
+    # generate a non-stationary trajectory simulation
     x, y = tvdgp.generateDGP(N)
 
     training_pnl = run_simulation(x, y, agent, True)
@@ -78,13 +75,11 @@ for j in range(NUM_TRAINING_ITERATIONS):
         else:
             print "pct_progress = %s %% (current average P&L is %s)" % (pct_progress, np.mean(training_pnls[-DELTA:]))
 
-print "Agent epsilon after training: ", agent.epsilon
 agent.epsilon = 0.
 
-in_samplePnL = run_simulation(x, y, agent)
-print "Average P&L after training: ", in_samplePnL
+print "Evaluating the agent's average performance..."
+out_samplePnLs = []
 
-print "Testing the agent..."
 # 3. test the agent on a series of stationary trajectories, show that it generalizes
 for j in range(NUM_TEST_ITERATIONS):
     x_test, y_test = tvdgp.generateDGP(N)
@@ -93,10 +88,28 @@ for j in range(NUM_TEST_ITERATIONS):
 
 fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
 
+print "Average out-sample P&L across the tests: %s (standard deviation: %s)" % (
+    np.mean(out_samplePnLs),
+    np.std(out_samplePnLs)
+)
+
 ax1.plot(training_pnls)
 ax1.set_title("Part 3 - In-sample P&Ls")
 ax2.plot(out_samplePnLs)
 ax2.set_title("Part 3 - Out-of-sample P&Ls")
 plt.show()
 
-print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
+# Here we simulate model validation: we generate 2 trajectories, the first representing the
+# historical realization that we would have used to produce and calibrate our generative model,
+# and the second representing the future, unseen real data that we would expect our agent to
+# generalize successfully to.
+historicalX, historicalY = tvdgp.generateDGP(N)
+futureX, futureY = tvdgp.generateDGP(N)
+
+historicalPnL = run_simulation(historicalX, historicalY, agent)
+futurePnL = run_simulation(futureX, futureY, agent)
+
+print "P&L on historical realization: %s, P&L on future realization: %s" % (
+    historicalPnL,
+    futurePnL
+)
