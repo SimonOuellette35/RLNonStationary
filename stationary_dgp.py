@@ -7,7 +7,7 @@ def generateDGP(N=10000):
     sigmaX = 0.05
     sigmaEta = 0.1
     theta = 0.05
-    mu = 1.
+    mu = 100.
 
     X = []
     Y = []

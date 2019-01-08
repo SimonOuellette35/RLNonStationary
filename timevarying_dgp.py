@@ -14,6 +14,9 @@ def generateDGP(N=10000):
         if t % 200 == 0:
             mu += np.random.normal(0., 0.25)
 
+        if np.random.uniform(0, 1) >= 0.999:
+            mu += np.random.uniform(-2.5, 2.5)
+
         if len(X) == 0:
             X.append(np.random.normal(10., sigmaX))
         else:

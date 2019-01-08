@@ -3,7 +3,7 @@ from rl_agent import RLAgent
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 5000 # TODO: what if we change N, can we accentuate the difference?
+N = 2000
 REWARD_HORIZON = 100
 DISCOUNT_DECAY = 0.98
 
