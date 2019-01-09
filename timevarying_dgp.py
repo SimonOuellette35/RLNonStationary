@@ -5,7 +5,7 @@ def generateDGP(N=10000):
     sigmaX = 0.05
     sigmaEta = 0.1
     theta = 0.05
-    mu = 1.
+    mu = 100.
 
     X = []
     Y = []
@@ -25,7 +25,6 @@ def generateDGP(N=10000):
         epsilon.append(epsilon[-1] + theta * (mu - epsilon[-1]) + np.random.normal(0., sigmaEta))
 
         Y.append(X[-1] + epsilon[-1])
-
 
     X = np.array(X)
     Y = np.array(Y)
