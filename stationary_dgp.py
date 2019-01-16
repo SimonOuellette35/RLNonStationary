@@ -6,7 +6,7 @@ def generateDGP(N=10000):
     # successful estimation is necessary for optimal trading of assets X and Y.
     sigmaX = 0.05
     sigmaEta = 0.1
-    theta = 0.05
+    theta = 0.1
     mu = 100.
 
     X = []
