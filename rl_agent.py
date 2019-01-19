@@ -11,7 +11,7 @@ class RLAgent:
         self.memory = deque(maxlen=500000)
         self.epsilon = 1.0  # exploration rate
         self.epsilon_min = 0.0
-        self.epsilon_decay = 0.7
+        self.epsilon_decay = 0.5
         self.model = None
 
     def remember(self, sar):
@@ -60,10 +60,11 @@ class RLAgent:
 
     def replay(self):
         # specify parameters via map
-        max_depth = 5
-        num_round = 2
-        gamma = 0.1
-        eta = 0.3
+        max_depth = 6
+        num_round = 3
+
+        gamma = 0.05
+        eta = 0.75
 
         param = {'max_depth': max_depth, 'eta': eta, 'silent': 1, 'gamma': gamma, 'objective': 'reg:linear'}
 

@@ -12,10 +12,10 @@ def generateDGP(N=10000):
     epsilon = [mu]
     for t in range(N):
         if t % 200 == 0:
-            mu += np.random.normal(0., 0.25)
+            mu += np.random.standard_cauchy() * 0.01
 
-        if np.random.uniform(0, 1) >= 0.999:
-            mu += np.random.uniform(-2.5, 2.5)
+        if np.random.uniform(0, 1) >= 0.995:
+            mu += np.random.uniform(-3, 3)
 
         if len(X) == 0:
             X.append(np.random.normal(10., sigmaX))
