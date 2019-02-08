@@ -25,7 +25,10 @@ def generateDGP(N=10000):
     X = np.array(X)
     Y = np.array(Y)
 
-    return X, Y
+    discretized_X = np.round(X * 100.0) / 100.
+    discretized_Y = np.round(Y * 100.0) / 100.
+
+    return discretized_X, discretized_Y
 
 # X, Y = generateDGP()
 # plt.plot(X)
