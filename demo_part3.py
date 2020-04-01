@@ -82,12 +82,12 @@ NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
 # =================================================== Part 3 =======================================================
-print "Part 3: The solution -- simulation-based learning, with rolling estimate"
-print "1. we generate several trajectories with our (theoretically perfect) generative model."
-print "2. we train the agent on those trajectories."
-print "3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted)."
+print("Part 3: The solution -- simulation-based learning, with rolling estimate")
+print("1. we generate several trajectories with our (theoretically perfect) generative model.")
+print("2. we train the agent on those trajectories.")
+print("3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted).")
 
-print "Training the agent..."
+print("Training the agent...")
 agent = RLAgent(2, 3)
 training_pnls = []
 DELTA = 20
@@ -102,13 +102,13 @@ for j in range(NUM_TRAINING_ITERATIONS):
 
         pct_progress = (float(j) / float(NUM_TRAINING_ITERATIONS)) * 100.0
         if j == 0:
-            print "pct_progress = %s %%" % (pct_progress)
+            print(f"pct_progress = {pct_progress} %")
         else:
-            print "pct_progress = %s %% (current average P&L is %s)" % (pct_progress, np.mean(training_pnls[-DELTA:]))
+            print(f"pct_progress =  {pct_progress}% (current average P&L is {np.mean(training_pnls[-DELTA:])}")
 
 agent.epsilon = 0.
 
-print "Evaluating the agent's average performance..."
+print("Evaluating the agent's average performance...")
 out_samplePnLs = []
 
 # 3. test the agent on a series of stationary trajectories, show that it generalizes
@@ -119,10 +119,7 @@ for j in range(NUM_TEST_ITERATIONS):
 
 fig, (ax1, ax2) = plt.subplots(1, 2, sharex=True, sharey=True)
 
-print "Average out-sample P&L across the tests: %s (standard deviation: %s)" % (
-    np.mean(out_samplePnLs),
-    np.std(out_samplePnLs)
-)
+print(f"Average out-sample P&L across the tests: {np.mean(out_samplePnLs)} (standard deviation: {np.std(out_samplePnLs)})")
 
 ax1.plot(training_pnls)
 ax1.set_title("Part 3 - In-sample P&Ls")
@@ -140,7 +137,4 @@ futureX, futureY = tvdgp.generateDGP(N)
 historicalPnL = run_simulation(historicalX, historicalY, agent)
 futurePnL = run_simulation(futureX, futureY, agent)
 
-print "P&L on historical realization: %s, P&L on future realization: %s" % (
-    historicalPnL,
-    futurePnL
-)
+print(f"P&L on historical realization: {historicalPnL}, P&L on future realization: {futurePnL}")

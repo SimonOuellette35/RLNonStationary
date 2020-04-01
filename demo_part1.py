@@ -69,10 +69,10 @@ NUM_TRAINING_ITERATIONS = 100
 NUM_TEST_ITERATIONS = 100
 
 # =================================================== Part 1 =======================================================
-print "Part 1: Optimizing on purely stationary time series"
-print "1. we get a specific historical realization of data from our stationary DGP."
-print "2. we train the agent on that trajectory."
-print "3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted)."
+print("Part 1: Optimizing on purely stationary time series")
+print("1. we get a specific historical realization of data from our stationary DGP.")
+print("2. we train the agent on that trajectory.")
+print("3. we test that trained agent on new data from the same DGP: we show that its performance generalizes well (as predicted).")
 
 in_samplePnLs = []
 out_samplePnLs = []
@@ -83,7 +83,7 @@ spread = y - x
 plt.plot(spread)
 plt.show()
 
-print "Training the agent..."
+print("Training the agent...")
 # 2. train the agent on that trajectory, show that it learned some optimum
 agent = RLAgent(2, 3)
 training_pnls = []
@@ -96,16 +96,15 @@ for j in range(NUM_TRAINING_ITERATIONS):
 
         pct_progress = (float(j) / float(NUM_TRAINING_ITERATIONS)) * 100.0
         if j == 0:
-            print "pct_progress = %s %%" % (pct_progress)
+            print(f"pct_progress = {pct_progress} %")
         else:
-            print "pct_progress = %s %% (current average P&L is %s)" % (pct_progress, np.mean(training_pnls[-DELTA:]))
+            print(f"pct_progress = {pct_progress} % (current average P&L is {np.mean(training_pnls[-DELTA:])})")
 
 agent.epsilon = 0.
 
 training_pnl = run_simulation(x, y, agent, False)
-print "Training P&L = ", training_pnl
-
-print "Testing the agent..."
+print(f"Training P&L = {training_pnl}")
+print("Testing the agent...")
 # 3. test the agent on a series of stationary trajectories, show that it generalizes
 for j in range(NUM_TEST_ITERATIONS):
     x_test, y_test = sdgp.generateDGP(N)
@@ -120,4 +119,4 @@ ax2.plot(out_samplePnLs)
 ax2.set_title("Part 1 - Out-of-sample P&Ls")
 plt.show()
 
-print "Average out-sample P&L across the tests: ", np.mean(out_samplePnLs)
+print(f"Average out-sample P&L across the tests: {np.mean(out_samplePnLs)}")
